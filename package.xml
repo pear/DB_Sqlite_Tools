@@ -13,15 +13,26 @@
       <email>gurugeek@php.net</email>
       <role>lead</role>
     </maintainer>
-  </maintainers>
+     <maintainer>
+      <user>morbid</user>
+      <name>Ashley Hewson</name>
+      <email>morbidness@gmail.com</email>
+      <role>contributor</role>
+    </maintainer>
+     <maintainer>    
+      <user>negora</user>
+      <name>Radu Negoescu</name>
+      <email>negora@dawnideas.com</email>
+      <role>contributor</role>
+    </maintainer>
+ </maintainers>
   <release>
-    <version>0.1.2</version>
-    <date>2004-09-24</date>
-    <license>PHP License 3.0</license>
+    <version>0.1.3</version>
+    <date>2004-09-29</date>
+    <license>BSD License</license>
     <state>alpha</state>
-    <notes>-Added the functionality to insert and retrieve
-    encrypted data from an Sqlite database
-    -Fixed a minor E_STRICT bug on the XML Parser
+    <notes>-Replaced Xtea with ArcFour for the encryption routines
+        -fixed db connection exception
     </notes>
     <deps>
       <dep type="php" rel="ge" version="5.0.0" optional="no"/>
@@ -32,12 +43,21 @@
       </file>
       <file role="php" baseinstalldir="DB/Sqlite" install-as="Tools/Exception.php" name="Tools/Exception.php"/>
       <file role="php" baseinstalldir="DB/Sqlite" install-as="Tools/XMLParser.php" name="Tools/XMLParser.php"/>
-      <file role="php" baseinstalldir="DB/Sqlite" install-as="Tools/Xtea.php" name="Tools/Xtea.php"/>
+      <file role="php" baseinstalldir="DB/Sqlite" install-as="Tools/ArcFour.php" name="Tools/ArcFour.php"/>
       <file role="php" baseinstalldir="DB/Sqlite" install-as="Tools/DBC.php" name="Tools/DBC.php"/>
     </filelist>
   </release>
   <changelog>
-  
+<release>
+    <version>0.1.2</version>
+    <date>2004-09-24</date>
+    <license>PHP License 3.0</license>
+    <state>alpha</state>
+    <notes>-Added the functionality to insert and retrieve
+    encrypted data from an Sqlite database
+    -Fixed a minor E_STRICT bug on the XML Parser
+    </notes>
+    </release>
    <release>
     <version>0.1.1</version>
     <date>2004-09-08</date>
