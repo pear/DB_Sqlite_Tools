@@ -2,9 +2,12 @@
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0">
   <name>DB_Sqlite_Tools</name>
-  <summary>DB_Sqlite_Tools is an object oriented interface to effectively manage and backup Sqlite databases.</summary>
+  <summary>DB_Sqlite_Tools is an object oriented interface to effectively manage and backup Sqlite databases.
+</summary>
   <description>
 Sqlite_Tools is an object oriented interface to effectively manage and backup Sqlite databases.
+It extends the existing functionality by providing a comprehensive solution for database backup, live 
+    replication, export in XML format, performance optmization and more.
   </description>
   <license>PHP License 3.0</license>
   <maintainers>
@@ -17,7 +20,7 @@ Sqlite_Tools is an object oriented interface to effectively manage and backup Sq
   </maintainers>
   <release>
 	<version>0.1.0</version>
-	<date>2004-09-01</date>
+	<date>2004-09-05</date>
     <state>alpha</state>
     <notes>
 Initial release.
@@ -27,7 +30,9 @@ Initial release.
         <file role="php" name="Tools.php">
           <replace type="package-info" from="@VER@" to="version"/>
         </file>
-      </dir>
+    </dir>
+    <file role="php" name="Tools/Exception.php" install-as="Tools/Exception.php" />
+    <file role="php" name="Tools/XMLParser.php" install-as="Tools/XMLParser.php" />
       <file role="test" name="tests/CacheTest.php" install-as="CacheTest.php" />
       <file role="test" name="tests/ftpTest.php" install-as="ftpTest.php" />
       <file role="test" name="tests/Integritytest.php" install-as="Integritytest.php" />
@@ -38,7 +43,8 @@ Initial release.
     <deps>
       <dep type="php" rel="ge" version="5.0.0" optional="no" />
     </deps>
-  </release>
   <changelog>
   </changelog>
-</package>
+                
+        </release>
+</package>  
