@@ -467,11 +467,13 @@ class DB_Sqlite_Tools
                     if (!@$lock) {
                         throw new DB_Sqlite_Tools_Exception(self::DB_SQLITE_TOOLS_CLF,-1);
                     }
-                    $clone = @copy($databases, $path.$databases.'.bkp');
+                    $dbfilename = explode("/",$databases);
+                    $dbfilename = $dbfilename[sizeof($dbfilename)-1];
+                    $clone = @copy($databases, $path.$dbfilename.'.bkp');
                     if (!@$clone) {
                         throw new DB_Sqlite_Tools_Exception(self::DB_SQLITE_TOOLS_CSF,-1);
                     } else {
-                        $this->sqliteConnect($path.$databases.'.bkp');
+                        $this->sqliteConnect($path.$dbfilename.'.bkp');
                         $this->sqliteQuery('PRAGMA integrity_check');
                     }
                     $release = @flock($fopenlock, LOCK_UN);
