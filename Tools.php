@@ -185,7 +185,22 @@ class DB_Sqlite_Tools
     private $dbobj;
 
 
-
+    /**
+     * path to logs DB
+     * @var string
+     */
+    private $logPath ;
+  
+    /**
+     * logs table
+     * @var string
+     */
+    private $logTable ;
+  
+    /**
+     * if true, shows logs as they are added to DB
+     */
+    public $showLogs ;
 
     /**
      * Instantiate a new SQLite_Tools Object
@@ -196,22 +211,29 @@ class DB_Sqlite_Tools
      * @return return $this->database array
      */
 
-    public function __construct($database)
+    public function __construct($database, $logTable = "logs", $logPath="DB_Sqlite_Tools_Logs.sqlite")
     {   
+        $this->logPath = $logPath ;
         if ( !is_array($database) ) {
             $this->database[] = $database;
         } else{
             $this->database = $database;
         }
+		$this->logTable = $logTable ;
     }
 
     /**
      * Checks the database integrity  I
-     * does an integrity check of the entire database including
-     * malformed records, corrupted pages out of order records, invalid indices
-     * returns true on success or the error details
-     * if $this->database is an array with more then one element it will perform
-     */ 
+     * does an integrity check of the entire database including 
+     * malformed records, corrupted pages out of order records, invalid indeces
+     * returns okay on success or the error details
+     * if multiple is true the the value for $database in  the constructor is expected to
+     * be an array with a list of databases.
+     *
+     * @param string $multiple checks one or multiple databases 
+     * @throws DB_Sqlite_Tools_Exception
+     * @return return true
+     */
      
 
     public function checkIntegrity() 
@@ -226,9 +248,7 @@ class DB_Sqlite_Tools
         }
         $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, 
         'Integrity check returned '.$this->result->integrity_check);
-        foreach($this->logs as $logObj) {
-            echo $logObj->toString();
-        }
+        $this->sqliteLogs() ;        
         return true;
       
     }    
@@ -278,9 +298,7 @@ class DB_Sqlite_Tools
         }
         $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, 
         "cache correctly reset to $pages");
-        foreach($this->logs as $logObj) {
-            echo $logObj->toString();
-        }
+        $this->sqliteLogs() ;
         return true;
     }   
    
@@ -322,10 +340,7 @@ class DB_Sqlite_Tools
         }
         $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, 
         "Synchronous value correctly reset to $value");
-        foreach($this->logs as $logObj) {
-            echo $logObj->toString();
-        }
-       
+        $this->sqliteLogs() ;       
         return true;
     }
     
@@ -369,7 +384,7 @@ class DB_Sqlite_Tools
             $this->info[$databases]['file_blocks'] = $stat['blocks'];
             $this->logs[$databases][] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, $this->info[$databases]);
         }
-        if ($this->debug) var_export($this->logs); // debug
+        $this->sqliteLogs() ;
         return $this->info;
     }
     
@@ -422,6 +437,7 @@ class DB_Sqlite_Tools
                 }
             }
         $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, 'done');
+        $this->sqliteLogs() ;
     }
 
     /**
@@ -451,7 +467,7 @@ class DB_Sqlite_Tools
             }
         }
         $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, "$this->backupar");
-        if ( $this->debug ) print_r ($this->backupar); // debug
+        $this->sqliteLogs() ;
         return true ;
     }
 
@@ -489,7 +505,7 @@ class DB_Sqlite_Tools
                 $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, "$this->backupp.$ftpdatabase uploaded");
             }
         }
-        if ($this->debug) var_export($this->logs);
+        $this->sqliteLogs() ;
         return true;
     }
 
@@ -512,7 +528,6 @@ class DB_Sqlite_Tools
         if (!@$logged) {
             throw new DB_Sqlite_Tools_Exception (self::DB_SQLITE_TOOLS_CLFS,-1);
         }
-
     }
 
 
@@ -549,7 +564,7 @@ class DB_Sqlite_Tools
                 throw new DB_Sqlite_Tools_Exception(self::DB_SQLITE_TOOLS_CCFL, -1);
             }
         }
-        if ($this->debug) var_export($this->logs);
+        $this->sqliteLogs() ;
         return true;
     }
      
@@ -572,6 +587,7 @@ class DB_Sqlite_Tools
         $command = escapeshellcmd ($command);
         $exec = shell_exec ("$command");
         $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, $exec);
+        $this->sqliteLogs() ;
     }
 
 
@@ -649,8 +665,8 @@ RSYNC;
 
         fclose($pipes[1]);
         $output = proc_close($proc);
-        if ( $this->debug ) echo "$output\n"; // debug
-
+        $this->logs[] = new DB_Sqlite_Log_Object( __CLASS__, __FUNCTION__, $output ) ;
+        $this->sqliteLogs() ;
     }
 
     /**
@@ -676,10 +692,19 @@ RSYNC;
      * @throws DB_Sqlite_Tools_Exception on failure
      */
 
-    public function sqliteLogs($db, $maketable = false, $table) {
+    private function sqliteLogs($db = "", $table = "") {
 
+        if( $db == "" )
+        {
+          $db = $this->logPath ;
+        }
+		if( $table == "" )
+		{
+		  $table = $this->logTable ;
+		}
+		
         $this->sqliteConnect($db);
-        if ($maketable == true) {
+        if (!$this->tableExists($table)) {
             $sql = " CREATE table $table (
                       id  INTEGER PRIMARY KEY,
                       log VARCHAR (200),
@@ -689,10 +714,14 @@ RSYNC;
 
         foreach($this->logs as $logs) {
                 $time = time();
-                $logs = sqlite_escape_string($logs->toString());
+                $lstr = $logs->toString() ;
+                $sstr = sqlite_escape_string($lstr);
+                if( $this->showLogs ) {
+                  echo strtr($lstr, get_html_translation_table(HTML_SPECIALCHARS));
+                }
                 $sql = "INSERT into $table
                         (log,date)
-                        VALUES ('$logs',$time)";
+                        VALUES ('$sstr',$time)";
                 $this->sqliteQuery($sql);
         }
 
@@ -715,6 +744,7 @@ RSYNC;
         catch(Exception $obj) {
             echo self::DB_SQLITE_TOOLS_COD.$this->dbobj->getCode() .": ".$this->dbobj->getMessage() ."\n\t";
             echo "on ".$this->dbobj->getFile() .":".$this->dbobj->getLine() ."\n";
+            return false ;
         }
         return true;
     }
@@ -725,9 +755,11 @@ RSYNC;
         $this->opendb = @sqlite_open ("$db", 0666, $this->error);
         
         if (!@$this->opendb){
+            // is this really procedural? ;)
             throw new DB_Sqlite_Tools_Exception (self::DB_SQLITE_TOOLS_COD."$this->error",-1);
         }
-
+        
+        return true ;
     }
 
   
@@ -858,6 +890,7 @@ RSYNC;
             if ($this->debug) echo "$database.xml successfully created\n";
             $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, "$database.xml successfully created");
         }
+        $this->sqliteLogs() ;
         return true;
     }
     
@@ -903,7 +936,7 @@ RSYNC;
            
            while($parser->getNextElement()) {
              if( $parser->getElementName() == "rows" ) {
-               #echo "Begin rows<br/>" ;
+               if( $this->debug ) { echo "Begin rows<br/>" ; }
                $i = 0 ;
                while($parser->getNextElement()) {
                  if( $parser->getElementName() == "row" ) {
@@ -911,10 +944,10 @@ RSYNC;
                    while($parser->getNextElement()) {
                      if( $parser->getElementName() == "column" ) {
                        $curColumn = $parser->getElementAttribute("name") ;
-                       #echo "Column $curColumn in row $i<br/>" ;
+                       if( $this->debug) { echo "Column $curColumn in row $i<br/>" ; }
                      } elseif( $parser->getElementName() == "/column" ) {
                        $rows[$i][$curColumn] = $this->XMLDecode($parser->getEnclosed()) ;    
-                       #echo "Close column $curColumn in row $i<br/>" ;
+                       if( $this->debug) { echo "Close column $curColumn in row $i<br/>" ; }
                      } elseif( $parser->getElementName() == "/row" ) {
                        break ;
                      }
@@ -927,7 +960,7 @@ RSYNC;
                } // end while
              } // end "rows"
              elseif( $parser->getElementName() == "columns" ) {
-               #echo "Begin columns<br/>" ;
+               if( $this->debug) {echo "Begin columns<br/>" ; }
                $i = 0 ;
                while($parser->getNextElement()) {
                  if( $parser->getElementName() == "column" ) {
@@ -936,7 +969,7 @@ RSYNC;
                    $i++ ;
                  } // end "row"
                  elseif( $parser->getElementName() == "/columns" ) {
-                   #echo "End columns<br/>" ;
+                   if( $this->debug ) { echo "End columns<br/>" ;  }
                    break ;
                  }
                } // end while           
@@ -980,7 +1013,12 @@ RSYNC;
        fclose($fh) ;
     }
 
-
+    public function tableExists( $table )
+	{
+	  $result = $this->sqliteQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='$table'");
+	  if( $result ) return true ;
+	  return false ;
+	}
 
 }
     
