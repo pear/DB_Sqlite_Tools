@@ -33,9 +33,6 @@
  *
  */
 
-require_once 'Tools/Exception.php';
-require_once 'Tools/XMLParser.php'; // custom parser for XML export and import by Ashley 
-
 /**
  * Class to manage sqlite database. An object-oriented interface to
  * sqlite integrity check, optimizations and backup and export.
@@ -56,6 +53,24 @@ require_once 'Tools/XMLParser.php'; // custom parser for XML export and import b
  *
  * @ 
  */
+
+    function __autoload($class) {
+        switch ($class) {
+            case 'DB_Sqlite_Tools_Xtea':
+                include ('Tools/Xtea.php');
+            break;
+            case 'DB_Sqlite_Tools_DBC':
+                include ('Tools/DBC.php');
+            break;
+            case 'DB_Sqlite_Tools_Exception':
+                include ('Tools/Exception.php');
+            break;
+            case 'DB_Sqlite_Tools_XMLParser':
+                include ('Tools/XMLParser.php');
+            break;
+        }
+    }
+    
 class DB_Sqlite_Tools
 {
     /**
@@ -197,7 +212,9 @@ class DB_Sqlite_Tools
      * @param string $database the Sqlite database
      * @return return $this->database array
      */
+    
 
+      
     public function __construct($database)
     {   
         if ( !is_array($database) ) {

@@ -30,6 +30,8 @@ class DB_Sqlite_Tools_XMLParser {
         public $element;
         public $enclosed;
         public $ignoreList = array();
+        private $str;
+        
         public function __construct($fh, $pos = 0) {
             $this->fh = $fh;
             fseek($fh, $pos);
