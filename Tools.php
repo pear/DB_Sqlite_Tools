@@ -1006,7 +1006,7 @@ class DB_Sqlite_Tools_LogObject
        return
        "<logevent>\n".
        "   <class>".$this->class."</class>\n".
-       "   <function>".$this->class."</function>\n".
+       "   <function>".$this->function."</function>\n".
        "   <data>\n".
                var_export( $this->data, true )."\n".
        "   </data>\n".
