@@ -35,7 +35,8 @@ class DB_Sqlite_Tools_XMLParser {
             fseek($fh, $pos);
             $this->strlen = strlen($this->str);
         }
-        public function getNextElement() {
+        public function getNextElement() 
+        {
             // the loop is so that if we are told to ignore a certain
             // element, then we can continue on to the next one and
             // return that.
@@ -77,22 +78,27 @@ class DB_Sqlite_Tools_XMLParser {
             }
             return true;
         }
-        public function ignore($str) {
+        public function ignore($str) 
+        {
             // add $str to ignore list
             $this->ignoreList[] = $str;
         }
-        public function getElement() {
+        public function getElement() 
+        {
             return trim($this->element);
         }
-        public function getEnclosed() {
+        public function getEnclosed() 
+        {
             return $this->enclosed;
         }
-        public function getElementAttribute($name) {
+        public function getElementAttribute($name) 
+        {  
             $el = $this->getElement();
             preg_match('/[ ]+'.$name.'[ ]*=[ ]*"([^"]*)"/', $el, $result);
             return $result[1];
         }
-        public function getElementName() {
+        public function getElementName() 
+        {
             preg_match("/^([^ ]*).*$/", $this->getElement(), $result);
             #echo $result[1] ;
             return $result[1];
