@@ -388,7 +388,7 @@ class DB_Sqlite_Tools
             $this->info[$databases]['file_ctime'] = date('r', $stat['ctime']);
             $this->info[$databases]['file_blksize'] = $stat['blksize'];
             $this->info[$databases]['file_blocks'] = $stat['blocks'];
-            $this->logs[$databases][] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, $this->info[$databases]);
+            $this->logs [] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, $this->info[$databases]);
         }
         $this->displayLogs();
         return $this->info;
