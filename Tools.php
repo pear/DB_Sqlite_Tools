@@ -2,8 +2,9 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4  */
 // +----------------------------------------------------------------------+
 // | PHP version 5                                                        |
-// +----------------------------------------------------------------------+/
-// | Copyright (c) 2004 David Costa                                       |                                     // | All rights reserved.                                                 |
+// +----------------------------------------------------------------------+
+// | Copyright (c) 2004 David Costa                                       |
+// | All rights reserved.                                                 |
 // +----------------------------------------------------------------------+
 // |                                                                      |
 // | Redistribution and use in source and binary forms, with or without   |
