@@ -211,9 +211,24 @@ class DB_Sqlite_Tools
      * malformed records, corrupted pages out of order records, invalid indices
      * returns true on success or the error details
      * if $this->database is an array with more then one element it will perform
-  
+     */ 
+     
+
+    public function checkIntegrity() 
+    {
+        if (!count($this->database)) {
+            throw new PEAR_Exception(self::DB_SQLITE_TOOLS_NAR."$this->database", -1);
+        } else {
+            foreach($this->database as $databases) {
+                $this->sqliteConnect($databases);
+                $this->sqliteQuery('PRAGMA integrity_check');
+            }
+        }
+        if ($this->debug) var_export($this->logs); //debug
+        return true;
     }    
      
+
 
     /**
      * Check or Set the cacheSize of the database  I
@@ -240,8 +255,7 @@ class DB_Sqlite_Tools
      * @return return true
      */
 
-   public function cacheSize($pages = '')
-   {
+    public function cacheSize($pages = '') {
         if (empty($pages)) {
             foreach($this->database as $databases) {
                 $this->sqliteConnect($databases);
@@ -257,10 +271,14 @@ class DB_Sqlite_Tools
                 }
             }
         }
-        if ($this->debug) var_export($this->logs); // debug
+        $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, 
+        "cache correctly reset to $pages");
+        foreach($this->logs as $logObj) {
+            echo $logObj->toString();
+        }
         return true;
-    }
-
+    }   
+   
     /**
      * Check or Set the synchronous value for the databaseI
      * Sqlite provides with different synchronous modes.
@@ -297,7 +315,12 @@ class DB_Sqlite_Tools
                 }
             }
         }
-        if ($this->debug) var_export($this->logs); // debug
+        $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, 
+        "Synchronous value correctly reset to $value");
+        foreach($this->logs as $logObj) {
+            echo $logObj->toString();
+        }
+       
         return true;
     }
     
@@ -688,7 +711,6 @@ RSYNC;
             echo self::DB_SQLITE_TOOLS_COD.$this->dbobj->getCode() .": ".$this->dbobj->getMessage() ."\n\t";
             echo "on ".$this->dbobj->getFile() .":".$this->dbobj->getLine() ."\n";
         }
-        $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, "$db opened");
         return true;
     }
     
@@ -720,8 +742,7 @@ RSYNC;
         } else {
             if ($this->debug) echo self::DB_SQLITE_TOOLS_QRS;
             if ($this->debug) print_r($this->result);
-            $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, $this->result);
-        }
+            }
         }
         return $this->result;
     }
