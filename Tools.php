@@ -371,8 +371,10 @@ class DB_Sqlite_Tools
             if( function_exists( "posix_getpwuid" ) ) {
                 $userinfo = posix_getpwuid($this->info[$databases]['file_owner_id']);
             }
-            $this->info[$databases]['file_owner_name'] = $userinfo['name'];
-            $this->info[$databases]['file_owner_group'] = $userinfo['gid'];
+            //on windows $userinfo=null
+            $this->info[$databases]['file_owner_name'] = empty($userinfo['name'])?"":$userinfo['name']  ;
+            //on windows $userinfo=null
+            $this->info[$databases]['file_owner_group'] = empty($userinfo['gid'])?"":$userinfo['gid'];  
             $this->info[$databases]['libenconding'] = sqlite_libencoding();
             $this->info[$databases]['libversion'] = sqlite_libversion();
             $this->info[$databases]['permissions'] = fileperms($databases);
@@ -412,8 +414,7 @@ class DB_Sqlite_Tools
      */
 
     public function copySafe($path= '')
-    {
-        $this->safecopy = true;
+    { 
         $this->backupp = $path;
 
             if (!count($this->database)) {
@@ -441,6 +442,7 @@ class DB_Sqlite_Tools
                     }
                 }
             }
+        $this->safecopy = true;
         $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, 'done');
     }
 
@@ -459,7 +461,7 @@ class DB_Sqlite_Tools
         //scanning the directory
         $scanned = @scandir($this->backupp,0);
 
-        if (!@$scanned) {
+        if (!$scanned) {
             throw new DB_Sqlite_Tools_Exception(self::DB_SQLITE_TOOLS_CSD,-1);
         }
         
@@ -872,7 +874,7 @@ RSYNC;
             if (!$XMLFile) {
                 throw new DB_Sqlite_Tools_Exception(self::DB_SQLITE_TOOLS_CCXML."$database.xml", -1);
             }
-            $this->performXMLDump($database, $XMLFile);
+            $this->performXMLDump($this->backupp.DIRECTORY_SEPARATOR.$database, $XMLFile);           
             $XMLclose = @fclose($XMLFile);
             if (!$XMLclose) {
                 throw new DB_Sqlite_Tools_Exception(self::DB_SQLITE_TOOLS_CCLXML."$database.xml", -1);
