@@ -861,10 +861,14 @@ RSYNC;
      * @throws  PEAR exception on failure
      */
 
-    public function createXMLDumps() 
+    public function createXMLDumps($path ='') 
     {
-        foreach($this->database as $database) {
-            $XMLFile = @fopen("$database.xml", "w");
+        if ($this->safecopy == false) {
+            throw new DB_Sqlite_Tools_Exception(self::DB_SQLITE_TOOLS_INSC, -1);
+        }      
+        $this->scanBackupDir();  
+        foreach($this->backupar as $database) {
+            $XMLFile = @fopen($path."$database.xml", "w");
             if (!$XMLFile) {
                 throw new DB_Sqlite_Tools_Exception(self::DB_SQLITE_TOOLS_CCXML."$database.xml", -1);
             }
