@@ -231,8 +231,8 @@ class DB_Sqlite_Tools
      * be an array with a list of databases.
      *
      * @param string $multiple checks one or multiple databases 
+     * @return true
      * @throws DB_Sqlite_Tools_Exception
-     * @return return true
      */
      
 
@@ -276,8 +276,8 @@ class DB_Sqlite_Tools
      *       before attemping to change their cache value.
      *
      * @param int    $pages number of pages to hold in the updated memory allocation
+     * @return true
      * @throws DB_Sqlite_Tools_Exception
-     * @return return true
      */
 
     public function cacheSize($pages = '') {
@@ -317,8 +317,8 @@ class DB_Sqlite_Tools
      * value for each of the databases.
      *
      * @param sting  $value
+     * @return true
      * @throws DB_Sqlite_Tools_Exception
-     * @return return true
      */
 
     public function sync($value = '') 
@@ -351,8 +351,8 @@ class DB_Sqlite_Tools
      * version, the size of the database, last time it was modified, blocks and generally
      * every possible information on the database files
      * @param string $multiple checks one or multiple databases
-     * @throws DB_Sqlite_Tools_Exception
      * @return true
+     * @throws DB_Sqlite_Tools_Exception
      */
 
     public function dbFileInfo() 
@@ -403,7 +403,6 @@ class DB_Sqlite_Tools
      *
      * @param string $path destination path
      * @throws DB_Sqlite_Tools_Exception
-     * @return
      */
 
     public function copySafe($path= '')
@@ -446,8 +445,8 @@ class DB_Sqlite_Tools
      *
      * It looks for previously backed up files with extension .bkp
      *
-     * @throws DB_Sqlite_Tools_Exception on failure
      * @return true
+     * @throws DB_Sqlite_Tools_Exception on failure
      */
     
     private function scanBackupDir ()
@@ -484,8 +483,8 @@ class DB_Sqlite_Tools
      * @param string $username ftp username
      * @param string $password ftp password
      * @param string $path     remote ftp path
-     * @throws DB_Sqlite_Tools_Exception on failure
      * @return true
+     * @throws DB_Sqlite_Tools_Exception on failure
      */
 
     
@@ -731,8 +730,8 @@ RSYNC;
     /**
      * Connects to the Sqlite database 
      * @param string $db  Path to the database
-     * @throws Exception on failure
      * @return true
+     * @throws Exception on failure
      */
     private function sqliteConnect($db) 
     {  
@@ -871,8 +870,8 @@ RSYNC;
      * The XML file is generated via the function performXMLDump
      * The backup file is by default the database name .xml 
      *
-     *@throws  PEAR exception on failure
      * @return true
+     * @throws  PEAR exception on failure
      */
 
     public function createXMLDumps() 
