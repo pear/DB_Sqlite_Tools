@@ -5,7 +5,7 @@
   <summary>DB_Sqlite_Tools is an object oriented interface to effectively manage and backup Sqlite databases.
 </summary>
   <description>
-Sqlite_Tools is an object oriented interface to effectively manage and backup Sqlite databases.
+DB_Sqlite_Tools is an object oriented interface to effectively manage and backup Sqlite databases.
 It extends the existing functionality by providing a comprehensive solution for database backup, live 
     replication, export in XML format, performance optmization and more.
   </description>
@@ -23,7 +23,8 @@ It extends the existing functionality by providing a comprehensive solution for 
 	<date>2004-09-05</date>
     <state>alpha</state>
     <notes>
-Initial release.
+        Initial alpha  release (but fully functional). Check the extensive documentation and examples 
+        (see End-user Documentation) for a quick start. This package requires PHP 5. 
     </notes>
     <filelist>
       <dir name="/" baseinstalldir="DB/Sqlite">
@@ -31,8 +32,8 @@ Initial release.
           <replace type="package-info" from="@VER@" to="version"/>
         </file>
     </dir>
-    <file role="php" name="Tools/Exception.php" install-as="Tools/Exception.php" />
-    <file role="php" name="Tools/XMLParser.php" install-as="Tools/XMLParser.php" />
+      <file role="php" name="Tools/Exception.php" install-as="Tools/Exception.php" />
+      <file role="php" name="Tools/XMLParser.php" install-as="Tools/XMLParser.php" />
       <file role="test" name="tests/CacheTest.php" install-as="CacheTest.php" />
       <file role="test" name="tests/ftpTest.php" install-as="ftpTest.php" />
       <file role="test" name="tests/Integritytest.php" install-as="Integritytest.php" />
