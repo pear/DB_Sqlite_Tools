@@ -23,7 +23,7 @@ It extends the existing functionality by providing a comprehensive solution for 
 	<date>2004-09-05</date>
     <state>alpha</state>
     <notes>
-        Initial alpha  release (but fully functional). Check the extensive documentation and examples 
+        Initial (but fully functional) alpha  release. Check the extensive documentation and examples 
         (see End-user Documentation) for a quick start. This package requires PHP 5. 
     </notes>
     <filelist>
