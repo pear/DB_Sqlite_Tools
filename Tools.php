@@ -75,7 +75,8 @@
  *
  * @ 
  */
-    function __autoload($class) {
+    function __autoload($class) 
+    {
         switch ($class) {
             case 'DB_Sqlite_Tools_DBC':
                 include ('Tools/DBC.php');

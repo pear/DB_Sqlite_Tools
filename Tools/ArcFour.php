@@ -41,8 +41,8 @@
 * @package Crypt
 * @author Dave Mertens <dmertens@zyprexia.com>
  */
-class DB_Sqlite_Tools_ArcFour {
-
+class DB_Sqlite_Tools_ArcFour 
+{
     /**
     * Real programmers...
     * @var array
@@ -74,13 +74,15 @@ class DB_Sqlite_Tools_ArcFour {
     * @return void
     * @access public
     */
-    public function __construct($key = null) {
+    public function __construct($key = null) 
+    {
         if ($key != null) {
             $this->setKey($key);
         }
     }
 
-    public function setKey($key) {
+    public function setKey($key) 
+    {
         if (strlen($key) > 0)
             $this->_key = $key;
     }
@@ -92,7 +94,8 @@ class DB_Sqlite_Tools_ArcFour {
     * @return void
     * @access public    
     */
-    public function key($key) {
+    public function key($key) 
+    {
         $len= strlen($key);
         for ($this->i = 0; $this->i < 256; $this->i++) {
             $this->s[$this->i] = $this->i;
@@ -115,8 +118,8 @@ class DB_Sqlite_Tools_ArcFour {
     * @return void
     * @access public    
     */
-    public function crypt(&$paramstr) {
-
+    public function crypt(&$paramstr) 
+    {
         //Init key for every call, Bugfix 22316
         $this->key($this->_key);
 
@@ -141,7 +144,8 @@ class DB_Sqlite_Tools_ArcFour {
     * @return void
     * @access public    
     */
-    public function decrypt(&$paramstr) {
+    public function decrypt(&$paramstr) 
+    {
         //Decrypt is exactly the same as encrypting the string. Reuse (en)crypt code
         $this->crypt($paramstr);
     }
