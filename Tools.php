@@ -183,20 +183,7 @@ class DB_Sqlite_Tools
      * @var string
      */
     private $dbobj;
-
-
-    /**
-     * path to logs DB
-     * @var string
-     */
-    private $logPath ;
-  
-    /**
-     * logs table
-     * @var string
-     */
-    private $logTable ;
-  
+   
     /**
      * if true, shows logs as they are added to DB
      */
@@ -211,17 +198,34 @@ class DB_Sqlite_Tools
      * @return return $this->database array
      */
 
-    public function __construct($database, $logTable = "logs", $logPath="DB_Sqlite_Tools_Logs.sqlite")
+    public function __construct($database)
     {   
-        $this->logPath = $logPath ;
         if ( !is_array($database) ) {
             $this->database[] = $database;
         } else{
             $this->database = $database;
         }
-		$this->logTable = $logTable ;
+			
     }
-
+    
+    
+    
+    /*
+     * Display The logs on the screen in an XML-like format.
+     */
+    
+    private function displayLogs() 
+    {   
+        foreach($this->logs as $logs) {
+            $lstr = $logs->toString();
+            if ($this->showLogs == true) {
+                  echo "<BR>";
+                  echo  strtr("$lstr", get_html_translation_table(HTML_SPECIALCHARS));
+                  echo "<BR>";
+            }     
+        }
+    }
+    
     /**
      * Checks the database integrity  I
      * does an integrity check of the entire database including 
@@ -235,10 +239,10 @@ class DB_Sqlite_Tools
      * @throws DB_Sqlite_Tools_Exception
      */
      
-
-    public function checkIntegrity() 
+    
+    public function checkIntegrity()
     {
-        if (!count($this->database)) {
+        if (!count($this->database)){
             throw new PEAR_Exception(self::DB_SQLITE_TOOLS_NAR."$this->database", -1);
         } else {
             foreach($this->database as $databases) {
@@ -248,7 +252,7 @@ class DB_Sqlite_Tools
         }
         $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, 
         'Integrity check returned '.$this->result->integrity_check);
-        $this->sqliteLogs() ;        
+        $this->displayLogs();        
         return true;
       
     }    
@@ -280,7 +284,8 @@ class DB_Sqlite_Tools
      * @throws DB_Sqlite_Tools_Exception
      */
 
-    public function cacheSize($pages = '') {
+    public function cacheSize($pages = '') 
+    {
         if (empty($pages)) {
             foreach($this->database as $databases) {
                 $this->sqliteConnect($databases);
@@ -298,7 +303,8 @@ class DB_Sqlite_Tools
         }
         $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, 
         "cache correctly reset to $pages");
-        $this->sqliteLogs() ;
+        //$this->displayLogs ;
+        $this->displayLogs();
         return true;
     }   
    
@@ -340,7 +346,7 @@ class DB_Sqlite_Tools
         }
         $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, 
         "Synchronous value correctly reset to $value");
-        $this->sqliteLogs() ;       
+        $this->displayLogs();       
         return true;
     }
     
@@ -384,7 +390,7 @@ class DB_Sqlite_Tools
             $this->info[$databases]['file_blocks'] = $stat['blocks'];
             $this->logs[$databases][] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, $this->info[$databases]);
         }
-        $this->sqliteLogs() ;
+        $this->displayLogs();
         return $this->info;
     }
     
@@ -436,7 +442,6 @@ class DB_Sqlite_Tools
                 }
             }
         $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, 'done');
-        $this->sqliteLogs() ;
     }
 
     /**
@@ -466,7 +471,6 @@ class DB_Sqlite_Tools
             }
         }
         $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, $this->backupar);
-        $this->sqliteLogs() ;
         return true ;
     }
 
@@ -504,7 +508,7 @@ class DB_Sqlite_Tools
                 $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, "$this->backupp.$ftpdatabase uploaded");
             }
         }
-        $this->sqliteLogs() ;
+        $this->displayLogs();
         return true;
     }
 
@@ -563,7 +567,7 @@ class DB_Sqlite_Tools
                 throw new DB_Sqlite_Tools_Exception(self::DB_SQLITE_TOOLS_CCFL, -1);
             }
         }
-        $this->sqliteLogs() ;
+        $this->displayLogs();
         return true;
     }
      
@@ -586,7 +590,7 @@ class DB_Sqlite_Tools
         $command = escapeshellcmd ($command);
         $exec = shell_exec ("$command");
         $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, $exec);
-        $this->sqliteLogs() ;
+        $this->displayLogs();
     }
 
 
@@ -665,23 +669,19 @@ RSYNC;
         fclose($pipes[1]);
         $output = proc_close($proc);
         $this->logs[] = new DB_Sqlite_Log_Object( __CLASS__, __FUNCTION__, $output ) ;
-        $this->sqliteLogs() ;
+        $this->displayLogs();
     }
 
     /**
      * Logs all the perfomed action in a database log
      * this includes backups, integrity checks
-     * each of the integrity queries. Verbose raw output for each of the 
+     * each of the integrity queries. Verbose XML style output for each of the 
      * actions.
      *
-     * Sample log output - This basically logs the first operation which is opening the database 
-     * 0 => class DB_Sqlite_Tools_LogObject {  private $function = 'sqliteConnect';  
-     * public $data = '/Users/davidcosta/Sites/tests/sqlite_tools/clown/two.sqlite.bkp opened';  
+     * Sample log output -
+     * <logevent>  <class>DB_Sqlite_Tools</class>  <function>cacheSize</function>  
+     * <data> 'cache correctly reset to 10000'  </data> </logevent>
      *
-     * And now the integrity check report:
-     * private $class = 'DB_DB_Sqlite_Tools';  },  1 => class DB_Sqlite_Tools_LogObject 
-     * private $function = 'sqliteQuery';  public $data = class stdClass {  public $integrity_check = 'ok';    
-     * 
      * All the logs are saved with the time of execution. The user can easily 
      * generate customized logs from the raw data provided in this package. 
      *
@@ -691,20 +691,11 @@ RSYNC;
      * @throws DB_Sqlite_Tools_Exception on failure
      */
 
-    private function sqliteLogs($db = "", $table = "") {
-
-        if( $db == "" )
-        {
-          $db = $this->logPath ;
-        }
-		if( $table == "" )
-		{
-		  $table = $this->logTable ;
-		}
-		
+    public function sqliteLogs( $db = "",$maketable = true, $table = "") 
+    {
         $this->sqliteConnect($db);
-        if (!$this->tableExists($table)) {
-            $sql = " CREATE table $table (
+        if ($maketable == true) {
+             $sql = " CREATE table $table (
                       id  INTEGER PRIMARY KEY,
                       log VARCHAR (200),
                      date VARCHAR (200))";
@@ -715,16 +706,13 @@ RSYNC;
                 $time = time();
                 $lstr = $logs->toString() ;
                 $sstr = sqlite_escape_string($lstr);
-                if( $this->showLogs ) {
-                  echo strtr($lstr, get_html_translation_table(HTML_SPECIALCHARS));
-                }
                 $sql = "INSERT into $table
                         (log,date)
                         VALUES ('$sstr',$time)";
                 $this->sqliteQuery($sql);
         }
 
-	unset( $this->logs ) ;
+	unset( $this->logs) ;
     }
    
     /**
@@ -753,8 +741,7 @@ RSYNC;
     {
         $this->opendb = @sqlite_open ("$db", 0666, $this->error);
         
-        if (!@$this->opendb){
-            // is this really procedural? ;)
+        if (!@$this->opendb){ 
             throw new DB_Sqlite_Tools_Exception (self::DB_SQLITE_TOOLS_COD."$this->error",-1);
         }
         
@@ -889,7 +876,7 @@ RSYNC;
             if ($this->debug) echo "$database.xml successfully created\n";
             $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, "$database.xml successfully created");
         }
-        $this->sqliteLogs() ;
+        $this->displayLogs();
         return true;
     }
     
@@ -1012,22 +999,7 @@ RSYNC;
        fclose($fh) ;
     }
 
-    
-    /**
-     * Check if log tables exist for the db logs 
-     * @param string $table    table name  
-     * @return true if table exist 
-     */
-     
-    public function tableExists( $table ) {
-	$result = $this->sqliteQuery("SELECT name FROM sqlite_master WHERE type='table' AND name={$table}");
-	  if( $result ) return true ;
-	  return false ;
-	}
-
 }
-    
-   
 
 class DB_Sqlite_Tools_LogObject
 {
@@ -1046,15 +1018,18 @@ class DB_Sqlite_Tools_LogObject
         
     public function toString()
     {
-       return
-       "<logevent>\n".
-       "   <class>".$this->class."</class>\n".
-       "   <function>".$this->function."</function>\n".
-       "   <data>\n".
-               var_export( $this->data, true )."\n".
-       "   </data>\n".
-       "</logevent>"
-       ;
+             
+      $data = var_export($this->data,true);
+     
+return <<<XML
+<logevent>
+    <class> $this->class </class>
+    <function> $this->function</function>
+    <data>$data</data>
+</logevent>            
+XML;
+
+
     }
 }
 ?>
