@@ -224,8 +224,13 @@ class DB_Sqlite_Tools
                 $this->sqliteQuery('PRAGMA integrity_check');
             }
         }
-        if ($this->debug) var_export($this->logs); //debug
+        $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, 
+        'Integrity check returned '.$this->result->integrity_check);
+        foreach($this->logs as $logObj) {
+            echo $logObj->toString();
+        }
         return true;
+      
     }    
      
 
