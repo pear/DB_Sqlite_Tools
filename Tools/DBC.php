@@ -182,9 +182,10 @@ class DB_Sqlite_Tools_DBC {
             $obj = $this->dbobj = new SQLiteDatabase("$db");
         }
         catch(Exception $obj) {
-            echo 'Cannot open database'.$this->dbobj->getCode() .": ".$this->dbobj->getMessage() 
+            echo 'Cannot open database: errorcode'.$obj->getCode() .": ".$obj->getMessage() 
             ."\n\t";
-            echo "on ".$this->dbobj->getFile() .":".$this->dbobj->getLine() ."\n";
+            echo "on ".$obj->getFile() .":".$obj->getLine() ."\n";
+            exit;
             return false;
         }
         return true;
