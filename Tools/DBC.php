@@ -87,10 +87,8 @@ class DB_Sqlite_Tools_DBC {
     
 
         public function __construct() 
-        {
-            $this->matrix = new DB_Sqlite_Tools_ArcFour; // instantiate a new ArcFour object
-            $key = $this->key;
-            $this->matrix->key($key);
+        {   
+            $this->matrix = new DB_Sqlite_Tools_ArcFour(); // instantiate a new ArcFour object
         }
 
 
@@ -113,8 +111,9 @@ class DB_Sqlite_Tools_DBC {
         throw new DB_Sqlite_Tools_Exception
         ('You need to specify an encryption key',-1);
         if ($crypt == true) {
-            foreach($dataValues as $matrix=>&$value) {   
-                 $this->matrix->crypt($value);
+            foreach($dataValues as $matrix=>&$value) {
+                $this->matrix->setkey($this->key); 
+                $this->matrix->crypt($value);
             }
         }
         if (empty($tableName)) {
@@ -258,6 +257,7 @@ class DB_Sqlite_Tools_DBC {
         foreach($this->result as $propertyName=>&$value) {
             if (!is_numeric($value)) {
                 if ($crypt == true) {
+                    $this->matrix->setkey($this->key); 
                     $this->matrix->decrypt($value);
                 }
             }
@@ -290,6 +290,7 @@ class DB_Sqlite_Tools_DBC {
                 foreach($result as $index=>&$value) {
                     if (!is_numeric($value)) {
                         if ($crypt == true) {
+                            $this->matrix->setkey($this->key); 
                             $this->matrix->decrypt($value);
                         }
                     }
