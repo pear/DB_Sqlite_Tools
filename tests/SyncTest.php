@@ -22,6 +22,6 @@ $sqlite->sync('FULL');
 </logevent>
 
 
-/*
+*/
 ?>
 
