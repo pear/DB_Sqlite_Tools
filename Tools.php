@@ -465,7 +465,7 @@ class DB_Sqlite_Tools
                       $this->backupar [] = $this->parsed;
             }
         }
-        $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, "$this->backupar");
+        $this->logs[] = new DB_Sqlite_Tools_LogObject(__CLASS__, __FUNCTION__, $this->backupar);
         $this->sqliteLogs() ;
         return true ;
     }
@@ -1012,9 +1012,15 @@ RSYNC;
        fclose($fh) ;
     }
 
-    public function tableExists( $table )
-	{
-	  $result = $this->sqliteQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='$table'");
+    
+    /**
+     * Check if log tables exist for the db logs 
+     * @param string $table    table name  
+     * @return true if table exist 
+     */
+     
+    public function tableExists( $table ) {
+	$result = $this->sqliteQuery("SELECT name FROM sqlite_master WHERE type='table' AND name={$table}");
 	  if( $result ) return true ;
 	  return false ;
 	}
