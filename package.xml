@@ -28,15 +28,15 @@ Initial release.
           <replace type="package-info" from="@VER@" to="version"/>
         </file>
       </dir>
-      <file role="test" name="tests/CacheTest.php" install-as="CacheTest.php"></file>
-      <file role="test" name="tests/ftpTest.php" install-as="ftpTest.php"></file>
-      <file role="test" name="tests/Integritytest.php" install-as="Integritytest.php"></file>
-      <file role="test" name="tests/ResyncTest.php" install-as="ResyncTest.php"></file>
-      <file role="test" name="tests/SyncTest.php" install-as="SyncTest.php"></file>
-      <file role="test" name="tests/XMLExport.php" install-as="XMLExport.php"></file>
+      <file role="test" name="tests/CacheTest.php" install-as="CacheTest.php" />
+      <file role="test" name="tests/ftpTest.php" install-as="ftpTest.php" />
+      <file role="test" name="tests/Integritytest.php" install-as="Integritytest.php" />
+      <file role="test" name="tests/ResyncTest.php" install-as="ResyncTest.php" />
+      <file role="test" name="tests/SyncTest.php" install-as="SyncTest.php" />
+      <file role="test" name="tests/XMLExport.php" install-as="XMLExport.php" />
     </filelist>
     <deps>
-      <dep type="php" rel="ge" version="5.0.0" />
+      <dep type="php" rel="ge" version="5.0.0" optional="no" />
     </deps>
   </release>
   <changelog>
