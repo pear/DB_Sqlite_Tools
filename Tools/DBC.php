@@ -1,18 +1,39 @@
  <?php
-
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4  */
 // +----------------------------------------------------------------------+
 // | PHP version 5                                                        |
 // +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2004 The PHP Group                                |
+// | Copyright (c) 2004 David Costa                                       |
+// | All rights reserved.                                                 |
 // +----------------------------------------------------------------------+
-// | This source file is subject to version 3.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available through the world-wide-web at the following url:           |
-// | http://www.php.net/license/3_0.txt.                                  |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
+// |                                                                      |
+// | Redistribution and use in source and binary forms, with or without   |
+// | modification, are permitted provided that the following conditions   |
+// | are met:                                                             |
+// |                                                                      |
+// | Redistributions of source code must retain the above copyright       |
+// | notice, this list of conditions and the following disclaimer.        |
+// |                                                                      |
+// | Redistributions in binary form must reproduce the above copyright    |
+// | notice, this list of conditions and the following disclaimer in the  |
+// | documentation and/or other materials provided with the distribution. |
+// |                                                                      |
+// | Neither the name of David Costa nor the names of his contributors may|
+// | be used to endorse or promote products derived from this software    |
+// | without specific prior written permission.                           |
+// |                                                                      |
+// | THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS  |
+// | "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT    |
+// | LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS    |
+// | FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE      |
+// | REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,          |
+// | INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, |
+// | BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS|
+// |  OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED  |
+// | AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT          |
+// | LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY|
+// | WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE          |
+// | POSSIBILITY OF SUCH DAMAGE.                                          |
 // +----------------------------------------------------------------------+
 // | Authors: David Costa     <gurugeek@php.net>                          |
 // | Authors: Radu Negoescu   <negora@dawnideas.com>                      |
@@ -39,7 +60,7 @@
  * This class, part of DB_Sqlite_Tools allows to insert on an sqlite database
  * securely encrypted data and retrieve and decript on the fly the encrypted data.
  * Since Sqlite might be seen as voulnerable, encrypted database will ensure the data integrity.
- * It doesn't require PHP to be compiled with MCrypt but it uses Crypt_Xtea, embedded (ported to
+ * It doesn't require PHP to be compiled with MCrypt but it uses Crypt_ArcFour, embedded (ported to
  * PHP 5 the original PEAR package).
  *
  * @class    DB_Sqlite_Tools_DBC 
@@ -58,17 +79,18 @@ class DB_Sqlite_Tools_DBC {
         private $dbobj;                     // the database object
         public $result;                     // results object
         public $debug = true;               // debug mode
-        public $matrix;                     // Xtea crypt object
+        public $matrix;                     // ArcFour crypt object
         public $key;                        // crypt key 
         const DB_STRING_DELIMITER = "'";    // delimited for autoExec
         const DB_AUTOQUERY_INSERT = 1;      // insert mode
         const DB_AUTOQUERY_UPDATE = 2;      // update mode 
     
 
-
         public function __construct() 
         {
-            $this->matrix = new DB_Sqlite_Tools_Xtea; // instantiate a new Xtea object
+            $this->matrix = new DB_Sqlite_Tools_ArcFour; // instantiate a new ArcFour object
+            $key = $this->key;
+            $this->matrix->key($key);
         }
 
 
@@ -78,7 +100,7 @@ class DB_Sqlite_Tools_DBC {
      * @param string $tableFields   DB fields name
      * @param string $tableValues   DB table value
      * @param string $querytype     type of query, insert by default
-     * @param string $crypt         crypt with Xtea before inserting the data, default true
+     * @param string $crypt         crypt with ArcFour before inserting the data, default true
      * @param string $whereString   necessary for UPDATE, default null
      * @return $mixedvar
      * @throws DB_Sqlite_Tools_Exception
@@ -91,8 +113,8 @@ class DB_Sqlite_Tools_DBC {
         throw new DB_Sqlite_Tools_Exception
         ('You need to specify an encryption key',-1);
         if ($crypt == true) {
-            foreach($dataValues as $matrix=>$value) {
-                $dataValues[$matrix] = $this->matrix->encrypt($value, $this->key);
+            foreach($dataValues as $matrix=>&$value) {   
+                 $this->matrix->crypt($value);
             }
         }
         if (empty($tableName)) {
@@ -236,7 +258,7 @@ class DB_Sqlite_Tools_DBC {
         foreach($this->result as $propertyName=>&$value) {
             if (!is_numeric($value)) {
                 if ($crypt == true) {
-                    $value = $this->matrix->decrypt($value, $this->key);
+                    $this->matrix->decrypt($value);
                 }
             }
         }
@@ -268,7 +290,7 @@ class DB_Sqlite_Tools_DBC {
                 foreach($result as $index=>&$value) {
                     if (!is_numeric($value)) {
                         if ($crypt == true) {
-                            $value = $this->matrix->decrypt($value, $this->key);
+                            $this->matrix->decrypt($value);
                         }
                     }
                 }
