@@ -7,9 +7,7 @@ $databases = array ('blogs.sqlite');
 
 // instantiate a new DB_Sqlite_Tools object
 $sqlite = new DB_Sqlite_Tools ($databases);
-
-// with the debug true the new cache value will be displayed on the screen
-$sqlite->debug = false;
+$sqlite->showLogs = true ;
 // we increase the Cache value to 10000
 $sqlite->CacheSize(10000);
 // and exect the following output on the browser and optionally on our log db

@@ -6,7 +6,7 @@ require_once 'Tools.php';
 $databases = array ('blogs.sqlite');  
 
 $sqlite = new DB_Sqlite_Tools ($databases);
-
+$sqlite->showLogs = true ;
 // changing the sync value to FULL for one or more databases 
 $sqlite->sync('FULL');
 
