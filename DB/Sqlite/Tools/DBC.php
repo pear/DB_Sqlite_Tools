@@ -12,7 +12,7 @@
  *
  * BSD License
  *
- * Copyright (c) 2004 David Costa
+ * Copyright (c) 2004-2006 David Costa
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,7 +47,7 @@
  * @author David Costa <gurugeek@php.net>
  * @author Ashley Hewson <morbidness@gmail.com>
  * @author Radu Negoescu <negora@dawnideas.com>
- * @copyright Copyright (c) 2004 David Costa
+ * @copyright Copyright (c) 2004-2006 David Costa
  * @license http://www.opensource.org/licenses/bsd-license.php
  *          BSD License
  * @version CVS: $Id$
@@ -77,7 +77,7 @@ require_once 'PEAR/Exception.php';
  * @author David Costa <gurugeek@php.net>
  * @author Ashley Hewson <morbidness@gmail.com>
  * @author Radu Negoescu <negora@dawnideas.com>
- * @copyright Copyright (c) 2004 David Costa
+ * @copyright Copyright (c) 2004-2006 David Costa
  * @license http://www.opensource.org/licenses/bsd-license.php
  *          BSD License
  * @version Release: @package_version@
@@ -105,7 +105,7 @@ class DB_Sqlite_Tools_DBC
      *
      * @var bool
      */
-    public $debug = true;
+    public $debug = false;
 
     /**
      * ArcFour crypt object.
@@ -414,16 +414,16 @@ class DB_Sqlite_Tools_DBC
     public function liteAll($sql, $crypt = true)
     {
         if ($this->key === null) {
-            throw new  PEAR_Exception('You need to specify an encryption key',-1);
+            throw new PEAR_Exception('You need to specify an encryption key',-1);
         }
 
-        $this->debug(print_r($sql));
+        $this->debug(print_r($sql, true));
 
         $results = $this->dbobj->query("$sql");
         if ($results != false) {
             $this->result = array();
             while ($result = $results->fetchObject()) {
-                foreach($result as $index=>&$value) {
+                foreach($result as $index => &$value) {
                     if (!is_numeric($value)) {
                         if ($crypt == true) {
                             $this->matrix->setkey($this->key);
