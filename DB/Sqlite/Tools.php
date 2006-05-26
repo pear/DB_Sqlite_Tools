@@ -13,7 +13,7 @@
  *
  * BSD License
  *
- * Copyright (c) 2004-2005 David Costa
+ * Copyright (c) 2004-2006 David Costa
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -49,7 +49,7 @@
  * @author David Costa <gurugeek@php.net>
  * @author Ashley Hewson <morbidness@gmail.com>
  * @author Firman Wandayandi <firman@php.net>
- * @copyright Copyright (c) 2004-2005 David Costa
+ * @copyright Copyright (c) 2004-2006 David Costa
  * @license http://www.opensource.org/licenses/bsd-license.php
  *          BSD License
  * @version CVS: $Id$
@@ -110,7 +110,7 @@ if (!function_exists('__autoload')) {
  * @author David Costa <gurugeek@php.net>
  * @author Ashley Hewson <morbidness@gmail.com>
  * @author Firman Wandayandi <firman@php.net>
- * @copyright Copyright (c) 2004-2005 David Costa
+ * @copyright Copyright (c) 2004-2006 David Costa
  * @license http://www.opensource.org/licenses/bsd-license.php
  *          BSD License
  * @version Release: @package_version@
@@ -1242,7 +1242,7 @@ RSYNC;
  * @author David Costa <gurugeek@php.net>
  * @author Ashley Hewson <morbidness@gmail.com>
  * @author Firman Wandayandi <firman@php.net>
- * @copyright Copyright (c) 2004-2005 David Costa
+ * @copyright Copyright (c) 2004-2006 David Costa
  * @license http://www.opensource.org/licenses/bsd-license.php
  *          BSD License
  * @version Release: @package_version@

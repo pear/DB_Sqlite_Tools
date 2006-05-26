@@ -12,7 +12,7 @@
  *
  * BSD License
  *
- * Copyright (c) 2004 David Costa
+ * Copyright (c) 2004-2006 David Costa
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,7 @@
  * @package DB_Sqlite_Tools
  * @author David Costa <gurugeek@php.net>
  * @author Ashley Hewson <morbidness@gmail.com>
- * @copyright Copyright (c) 2004 David Costa
+ * @copyright Copyright (c) 2004-2006 David Costa
  * @license http://www.opensource.org/licenses/bsd-license.php
  *          BSD License
  * @version CVS: $Id$
@@ -63,7 +63,7 @@
  * @package DB_Sqlite_Tools
  * @author David Costa <gurugeek@php.net>
  * @author Ashley Hewson <morbidness@gmail.com>
- * @copyright Copyright (c) 2004 David Costa
+ * @copyright Copyright (c) 2004-2006 David Costa
  * @license http://www.opensource.org/licenses/bsd-license.php
  *          BSD License
  * @version Release: @package_version@
