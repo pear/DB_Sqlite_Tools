@@ -38,23 +38,18 @@ extension
   <email>negora@dawnideas.com</email>
   <active>yes</active>
  </contributor>
- <date>2006-05-21</date>
- <time>02:00:44</time>
+ <date>2006-05-27</date>
+ <time>00:26:26</time>
  <version>
-  <release>0.1.4</release>
-  <api>0.1.4</api>
+  <release>0.1.5</release>
+  <api>0.1.5</api>
  </version>
  <stability>
   <release>alpha</release>
   <api>alpha</api>
  </stability>
  <license>BSD License</license>
- <notes>* Fixed Bug #2894: Improper path in Tools.php
-* Fixed Bug #2902: DBTools-&gt;copySafe($outPath);
-* Optimized code, replaced double quotes (&quot;)
-* Coding Standard cosmetic
-* More comments added
-* Removed Tools/Exception.php, replaced with PEAR_Exception
+ <notes>* Fixed bug: print_r() with no return value
   
  </notes>
  <contents>
@@ -77,6 +72,9 @@ extension
      </file>
     </dir> <!-- //DB/Sqlite -->
    </dir> <!-- //DB -->
+   <file baseinstalldir="" name="package2.xml" role="data">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
   </dir> <!-- / -->
  </contents>
  <dependencies>
@@ -172,6 +170,21 @@ extension
 * Coding Standard cosmetic
 * More comments added
 * Removed Tools/Exception.php, replaced with PEAR_Exception
+    
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.1.5</release>
+    <api>0.1.5</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2006-05-27</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>* Fixed bug: print_r() with no return value
     
    </notes>
   </release>

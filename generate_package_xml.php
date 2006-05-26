@@ -19,12 +19,7 @@ extension
 EOT;
 
 $notes = <<<EOT
-* Fixed Bug #2894: Improper path in Tools.php
-* Fixed Bug #2902: DBTools->copySafe(\$outPath);
-* Optimized code, replaced double quotes (")
-* Coding Standard cosmetic
-* More comments added
-* Removed Tools/Exception.php, replaced with PEAR_Exception
+* Fixed bug: print_r() with no return value
 EOT;
 
 $summary = <<<EOT
@@ -37,7 +32,7 @@ $options = array(
     'package'           => 'DB_Sqlite_Tools',
     'license'           => 'BSD License',
     'baseinstalldir'    => '',
-    'version'           => '0.1.4',
+    'version'           => '0.1.5',
     'packagedirectory'  => $packagedir,
     'pathtopackagefile' => $packagedir,
     'state'             => 'alpha',
@@ -46,8 +41,8 @@ $options = array(
     'summary'           => $summary,
     'description'       => str_replace("\n", '', $desc),
     'dir_roles'         => array(
-        'docs'      => 'doc',
-        'data'      => 'data'
+        'docs'          => 'doc',
+        'data'          => 'data'
     ),
     'ignore'            => array(
         'package.xml',

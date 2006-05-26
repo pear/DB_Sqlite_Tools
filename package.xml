@@ -37,39 +37,39 @@ extension
   </maintainer>
   </maintainers>
  <release>
-  <version>0.1.4</version>
-  <date>2006-05-21</date>
+  <version>0.1.5</version>
+  <date>2006-05-27</date>
   <license>BSD License</license>
   <state>alpha</state>
-  <notes>* Fixed Bug #2894: Improper path in Tools.php
-* Fixed Bug #2902: DBTools-&gt;copySafe($outPath);
-* Optimized code, replaced double quotes (&quot;)
-* Coding Standard cosmetic
-* More comments added
-* Removed Tools/Exception.php, replaced with PEAR_Exception
+  <notes>* Fixed bug: print_r() with no return value
   </notes>
   <deps>
    <dep type="php" rel="ge" version="5.0.0" optional="no"/>
   </deps>
   <filelist>
-   <dir name="DB" baseinstalldir="">
-    <dir name="Sqlite">
-     <dir name="Tools">
-      <file role="php" name="ArcFour.php">
+   <dir name="/" baseinstalldir="">
+    <dir name="DB">
+     <dir name="Sqlite">
+      <dir name="Tools">
+       <file role="php" name="ArcFour.php">
+        <replace type="package-info" from="@package_version@" to="version"/>
+       </file>
+       <file role="php" name="DBC.php">
+        <replace type="package-info" from="@package_version@" to="version"/>
+       </file>
+       <file role="php" name="XMLParser.php">
+        <replace type="package-info" from="@package_version@" to="version"/>
+       </file>
+      </dir> <!-- /DB/Sqlite/Tools -->
+      <file role="php" name="Tools.php">
        <replace type="package-info" from="@package_version@" to="version"/>
       </file>
-      <file role="php" name="DBC.php">
-       <replace type="package-info" from="@package_version@" to="version"/>
-      </file>
-      <file role="php" name="XMLParser.php">
-       <replace type="package-info" from="@package_version@" to="version"/>
-      </file>
-     </dir> <!-- /DB/Sqlite/Tools -->
-     <file role="php" name="Tools.php">
-      <replace type="package-info" from="@package_version@" to="version"/>
-     </file>
-    </dir> <!-- /DB/Sqlite -->
-   </dir> <!-- /DB -->
+     </dir> <!-- /DB/Sqlite -->
+    </dir> <!-- /DB -->
+    <file role="data" name="package2.xml">
+     <replace type="package-info" from="@package_version@" to="version"/>
+    </file>
+   </dir> <!-- / -->
   </filelist>
  </release>
  <changelog>
@@ -119,6 +119,14 @@ extension
 * Coding Standard cosmetic
 * More comments added
 * Removed Tools/Exception.php, replaced with PEAR_Exception
+    </notes>
+   </release>
+   <release>
+    <version>0.1.5</version>
+    <date>2006-05-27</date>
+    <license>BSD License</license>
+    <state>alpha</state>
+    <notes>* Fixed bug: print_r() with no return value
     </notes>
    </release>
  </changelog>
