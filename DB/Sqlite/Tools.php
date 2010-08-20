@@ -371,7 +371,7 @@ class DB_Sqlite_Tools
                 $this->sqliteQuery('PRAGMA default_cache_size');
             }
         } else {
-            if (!eregi('[[:digit:]]', $pages)) {
+            if (!preg_match('/\d/', $pages)) {
                 throw new PEAR_Exception(self::DB_SQLITE_TOOLS_NNU . $pages, -1);
             } else {
                 foreach($this->database as $databases) {
