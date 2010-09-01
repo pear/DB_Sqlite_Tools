@@ -424,7 +424,7 @@ class DB_Sqlite_Tools
         } else {
             foreach($this->database as $databases) {
                 $this->sqliteConnect($databases);
-                if (eregi('FULL|NORMAL|OFF', $value)) {
+                if (preg_match('/FULL|NORMAL|OFF/i', $value)) {
                     $this->sqliteQuery('PRAGMA default_synchronous = ' . $value);
                 } else {
                     throw new PEAR_Exception(self::DB_SQLITE_TOOLS_NAV . $value, -1);
