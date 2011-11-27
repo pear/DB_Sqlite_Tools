@@ -1,9 +1,8 @@
 <?php
-
-require_once 'Tools.php';
+require_once 'DB/Sqlite/Tools.php';
 
 // defining one or more databases in our array 
-$databases = array ('blogs.sqlite');  
+$databases = array('blogs.sqlite');  
 
 $sqlite = new DB_Sqlite_Tools ($databases);
 $sqlite->showLogs = true ;
@@ -23,5 +22,3 @@ $sqlite->sync('FULL');
 
 
 */
-?>
-

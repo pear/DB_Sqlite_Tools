@@ -1,12 +1,11 @@
 <?php
-
-require_once 'Tools.php';
+require_once 'DB/Sqlite/Tools.php';
 
 // one ore more databases in the array 
-$databases = array ('blogs.sqlite');  
+$databases = array('blogs.sqlite');  
 
 // new object 
-$sqlite = new DB_Sqlite_Tools ($databases);
+$sqlite = new DB_Sqlite_Tools($databases);
 $sqlite->showLogs = true ;
 // check integrity
 $sqlite->checkIntegrity();
@@ -23,6 +22,4 @@ $sqlite->checkIntegrity();
 </logevent>
 */
 
-
-?>
 

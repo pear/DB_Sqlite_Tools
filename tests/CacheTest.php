@@ -1,9 +1,8 @@
 <?php
-
-require_once 'Tools.php';
+require_once 'DB/Sqlite/Tools.php';
 
 // require one or more databases in the array 
-$databases = array ('blogs.sqlite');  
+$databases = array('blogs.sqlite');  
 
 // instantiate a new DB_Sqlite_Tools object
 $sqlite = new DB_Sqlite_Tools ($databases);
@@ -16,6 +15,4 @@ $sqlite->CacheSize(10000);
 // name mylogs. This will work the first time with the table created, once we have a table
 // we will call it as $sqlite->sqliteLogs('logs.sqlite.',false,'mylogs');
 $sqlite->sqliteLogs('logs.sqlite.',true,'mylogs');
- 
-?>
 

@@ -3,7 +3,7 @@ error_reporting(E_ALL|E_STRICT);
 
 // FTP backup test
 
-require_once 'Tools.php';
+require_once 'DB/Sqlite/Tools.php';
 
 $databases = array ('blogs.sqlite', 'code.sqlite');  // we set 2 databases for the backup operation
 
@@ -27,5 +27,4 @@ $sqlite->ftpBackup('hostname.com','username','password','remotedir'); // uplodin
  */
 
 
-?>
 

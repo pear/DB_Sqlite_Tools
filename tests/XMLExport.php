@@ -1,12 +1,12 @@
 <?php
 error_reporting(E_ALL|E_STRICT);
-require_once 'Tools.php';
+require_once 'DB/Sqlite/Tools.php';
 
 // require one or more databases in the array 
 $databases = array ('blogs.sqlite','rkc.sqlite');  
 
 // instantiate a new DB_Sqlite_Tools object
-$sqlite = new DB_Sqlite_Tools ($databases);
+$sqlite = new DB_Sqlite_Tools($databases);
 $sqlite->showLogs = true ;
 
 // copysafe is required before performing the XML export operation
@@ -34,6 +34,4 @@ $sqlite->sqliteLogs('logs.sqlite.',false,'mylogs');
 
 
 */
- 
-?>
 
