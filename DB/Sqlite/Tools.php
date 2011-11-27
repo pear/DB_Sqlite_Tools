@@ -848,7 +848,7 @@ RSYNC;
 
         foreach($this->logs as $logs) {
                 $time = time();
-                $lstr = $logs->toString() ;
+                $lstr = $logs->__toString() ;
                 $sstr = sqlite_escape_string($lstr);
                 $sql = "INSERT into $table(log, date)
                         VALUES ('$sstr',$time)";
@@ -1283,9 +1283,10 @@ class DB_Sqlite_Tools_LogObject
      * @param string $data Log data or message.
      */
     public function __construct($class, $function, $data)
-    {       $this->class = $class;
-            $this->function = $function;
-            $this->data = $data;
+    {
+        $this->class = $class;
+        $this->function = $function;
+        $this->data = $data;
     }
 
     // }}}
