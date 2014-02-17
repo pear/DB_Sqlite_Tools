@@ -13,7 +13,7 @@
     ],
     "autoload": {
         "psr-0": {
-            "DB_Sqlite_Tools": "./"
+            "DB": "./"
         }
     },
     "description": "More info available on: http://pear.php.net/package/DB_Sqlite_Tools",
